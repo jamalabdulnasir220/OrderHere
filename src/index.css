@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Concert+One&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.logo {
+    font-family: "Concert One", sans-serif;
+}
+
+/* animation effects */
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-down {
+  animation: slideDown 0.5s ease-out;
+}
