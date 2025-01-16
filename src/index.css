@@ -60,6 +60,21 @@
   animation: slideDown 0.5s ease-out;
 }
 
+@keyframes slideLeft {
+  from {
+    transform: translateX(-20%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-left {
+  animation: slideLeft 0.5s ease-out;
+}
+
 @keyframes bounceDown {
   0% {
     transform: translateY(-50px);
