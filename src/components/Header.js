@@ -3,12 +3,37 @@ import {
   faGift,
   faHeart,
   faHouse,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import UserContext from "../utils/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { showLogin, turnToLogin } from "../utils/loginSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  const cartItems = useSelector((store) => store.cart.items);
+  const turnLoginBtn = useSelector((store) => store.login.logInBtn);
+
+  const [bounce, setBounce] = useState(false);
+
+  const loginBtnAction = () => {
+    setLoggedInUser("Guest");
+    dispatch(showLogin());
+    dispatch(turnToLogin());
+  };
+
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      setBounce(true);
+      const timer = setTimeout(() => setBounce(false), 3000);
+      return () => clearInterval(timer);
+    }
+  }, [cartItems.length]);
+
   return (
     <div className="h-[10vh] bg-white shadow-lg z-30 w-full fixed slide-down">
       <div className="flex justify-between items-center max-w-[80rem]  pl-4 m-auto">
@@ -71,17 +96,41 @@ const Header = () => {
                 }
               >
                 <div className="flex flex-col items-center md:flex-row">
-                  <FontAwesomeIcon icon={faCartShopping} />
-                  <span className="pl-2 hover:text-orange-600">Cart</span>
+                  <div className={`relative ${bounce ? "bounce-down" : ""}`}>
+                    <FontAwesomeIcon icon={faCartShopping} />
+                    {cartItems.length > 0 && (
+                      <p className="absolute bg-orange-600 px-1 rounded-full text-white text-xs -top-2 -right-2">
+                        {cartItems.length}
+                      </p>
+                    )}
+                  </div>
+                  {cartItems.length < 1 && (
+                    <span className="pl-2 hover:text-orange-600">Cart</span>
+                  )}
                 </div>
               </NavLink>
             </li>
           </ul>
         </nav>
-        <div className="relative">
-          <button>
-            
+        <div className="relative group">
+          <button className="mx-6 font-bold text-sm md:text-[1rem] flex flex-col items-center md:flex-row text-orange-600">
+            {loggedInUser === "Guest" ? (
+              <FontAwesomeIcon icon={faUser} />
+            ) : (
+              "Hello"
+            )}
+            <span className="md:pl-2 pl-0 text-gray-600 hover:text-orange-600">
+              {loggedInUser}
+            </span>
           </button>
+          <div className="text-center text-sm md:text-[1rem] bg-gray-200 rounded-md py-2 px-6 absolute mt-1 md:mt-2 mx-0 md:mx-3 shadow-lg shadow-gray-400 opacity-0 transform translate-y-[-20px] group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out ">
+            <button
+              onClick={loginBtnAction}
+              className="text-gray-600 font-semibold"
+            >
+              {turnLoginBtn}
+            </button>
+          </div>
         </div>
       </div>
     </div>
