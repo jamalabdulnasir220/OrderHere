@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useResMenu from "../utils/useResMenu";
 import Loader from "./Loader";
 import fssaiLogo from "../utils/images/fssai.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp, faCircle, faLocationDot, faMotorcycle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUp, faCartShopping, faCircle, faLocationDot, faMotorcycle } from "@fortawesome/free-solid-svg-icons";
 import MenuCategory from "./MenuCategory";
+import { useSelector } from "react-redux";
 
 const ResMenu = () => {
   const [showIndex, setShowIndex] = useState(0);
@@ -13,10 +14,36 @@ const ResMenu = () => {
   const [showNonVeg, setShowNonVeg] = useState(false);
   const [showBestseller, setShowBestseller] = useState(false);
   const [isBestSellerActive, setisBestSellerActive] = useState(false);
+  
   const { ResId } = useParams();
   const resInfo = useResMenu(ResId);
 
+  const isVisible = useSelector((store) => store.cart.ShowToaster);
+  const cartItems = useSelector((store) => store.cart.items);
+
   if (resInfo === null) return <Loader />;
+
+   // Toggle veg items
+   const toggleVeg = () => {
+    setShowVeg(!showVeg);
+    setShowNonVeg(false);
+    setShowBestseller(false);
+  };
+
+  // Toggle non-veg items
+  const toggleNonVeg = () => {
+    setShowNonVeg(!showNonVeg);
+    setShowVeg(false);
+    setShowBestseller(false);
+  };
+
+  //filter bestseller items
+  const filterBestseller = () => {
+    setisBestSellerActive(!isBestSellerActive);
+    setShowBestseller(!showBestseller);
+    setShowVeg(false);
+    setShowNonVeg(false);
+  };
 
   const {
     name,
@@ -36,7 +63,7 @@ const ResMenu = () => {
         "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
     );
 
-  console.log(categories);
+
 
   return (
     <div className="res-menu max-w-[50rem] m-auto slide-down pt-[4rem] mx-4 lg:mx-auto">
@@ -99,7 +126,7 @@ const ResMenu = () => {
               id="veg"
               type="checkbox"
               checked={showVeg}
-              //   onChange={toggleVeg}
+                onChange={toggleVeg}
             />
             <label htmlFor="veg">
               <div className="handle-veg flex justify-center items-center">
@@ -117,7 +144,7 @@ const ResMenu = () => {
               id="nonVeg"
               type="checkbox"
               checked={showNonVeg}
-              //   onChange={toggleNonVeg}
+                onChange={toggleNonVeg}
             />
             <label htmlFor="nonVeg" className="non-veg-label">
               <div className="handle-nonVeg flex justify-center items-center">
@@ -130,7 +157,7 @@ const ResMenu = () => {
           className={`slide-right ml-4 rounded-full my-2 border-2 border-gray-300 py-3 px-4 font-bold text-gray-500 hover:shadow-lg hover:shadow-gray-400 ${
             isBestSellerActive === true ? "bg-gray-200" : "bg-white"
           }`}
-          //   onClick={filterBestseller}
+            onClick={filterBestseller}
         >
           Bestseller
         </button>
@@ -179,9 +206,29 @@ const ResMenu = () => {
           </button>
         </div>
         <p className="text-sm text-gray-600 text-center pb-10 pt-4">
-          All rights reserved | Amol Sasane
+          All rights reserved | Abdul Nasir Jamal
         </p>
       </div>
+      {isVisible && (
+        <div
+          className={`toaster ${
+            isVisible ? "toaster-enter" : "toaster-exit"
+          } rounded-t-xl lg:w-[50rem] w-[90vw]`}
+        >
+          <h1>
+            {cartItems.length} {cartItems.length > 1 ? "items" : "item"} added
+          </h1>
+          <Link to="/cart">
+            <div>
+              VIEW CART{" "}
+              <FontAwesomeIcon
+                icon={faCartShopping}
+                className="back-and-forth"
+              />
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

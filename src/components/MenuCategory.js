@@ -34,7 +34,7 @@ const MenuCategory = ({
         <span className="font-bold">{data.title} ({filteredMenu.length})</span>
         <span>{showItems ? "⮝" : "⮟"}</span>
       </div>
-      <div>{showItems && <MenuItemList  />}</div>
+      <div>{showItems && <MenuItemList items={filteredMenu}  />}</div>
     </div>
   );
 };

@@ -1,8 +1,10 @@
 import {
   faArrowLeft,
   faArrowRight,
+  faChevronLeft,
   faCircle,
   faMagnifyingGlass,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
@@ -24,6 +26,10 @@ import {
 import ResCard, { WithLabel } from "./ResCard";
 import { Link } from "react-router-dom";
 import Shimmer from "./Shimmer";
+import { useDispatch, useSelector } from "react-redux";
+import { hideLogin } from "../utils/loginSlice";
+import Login from "./Login";
+import Footer from "./Footer";
 
 const Body = () => {
   const [restaurantsList, setRestaurantsList] = useState([]);
@@ -38,10 +44,20 @@ const Body = () => {
   const [isFastDeliveryActive, setIsFastDeliveryActive] = useState(false);
   const [isLessCostActive, setIsLessCostActive] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const dispatch = useDispatch();
+
+  const showLoginPage = useSelector((store) => store.login.login);
+  const [isVisible, setIsVisible] = useState(showLoginPage);
 
   const errorRef = useRef(null);
   const carouselRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    if (errorMessage) {
+      errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [errorMessage]);
 
   const toggleVeg = () => {
     const vegRestaurants = showVeg
@@ -173,6 +189,21 @@ const Body = () => {
     setShowNonVeg(false);
     setShowVeg(false);
   };
+
+  const closeLoginPage = () => {
+    dispatch(hideLogin());
+  };
+
+  useEffect(() => {
+    if (showLoginPage) {
+      setIsVisible(true);
+      document.body.classList.add("no-scroll");
+    } else {
+      const timer = setTimeout(() => setIsVisible(false), 500);
+      document.body.classList.remove("no-scroll");
+      return () => clearTimeout(timer);
+    }
+  }, [showLoginPage]);
 
   const handleScrollLeft = () => {
     if (carouselRef.current) {
@@ -506,7 +537,35 @@ const Body = () => {
             ))}
           </div>
         </div>
+        {isVisible && (
+          <>
+            <div className="fixed inset-0 bg-black opacity-50 z-10"></div>
+            <div
+              className={`mt-[10vh] login-page fixed z-10 border border-gray-500 shadow-2xl bg-white w-[100vw] lg:w-[40vw] right-0 top-0 h-[90vh] rounded-l-xl transition-transform ${
+                showLoginPage ? "animate-slideInRight" : "animate-slideOutRight"
+              }`}
+            >
+              <div className="my-[5rem] mx-[5rem]">
+                <button
+                  className="text-3xl text-gray-300 hover:text-orange-600"
+                  onClick={closeLoginPage}
+                >
+                  <span className="hidden lg:block">
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                  </span>
+                  <span className="lg:hidden">
+                    <FontAwesomeIcon icon={faXmark} />
+                  </span>
+                </button>
+                <Login />
+              </div>
+            </div>
+          </>
+        )}
       </div>
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 };

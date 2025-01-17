@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Header from "./components/Header";
 import Body from "./components/Body";
-import Contact from "./components/Contact";
 import Error from "./components/Error";
 import About from "./components/About";
 import Cart from "./components/Cart";
@@ -11,6 +10,7 @@ import { UserProvider } from "./utils/UserContext";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import ResMenu from "./components/ResMenu";
+import Offers from "./components/Offers";
 
 const AppLayout = () => {
   return (
@@ -35,8 +35,8 @@ const appRouter = createBrowserRouter([
         element: <Body />,
       },
       {
-        path: "/contact",
-        element: <Contact />,
+        path: "/offers",
+        element: <Offers />
       },
       {
         path: "/about",

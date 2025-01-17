@@ -4,19 +4,43 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: {
     items: [],
+    ShowToaster: false,
+    hasPlacedOrder: false,
   },
   reducers: {
-    addItems: (state, action) => {
-      state.items.push(action.payload);
+    addItem: (state, action) => {
+      const itemId = action.payload.card.info.id;
+      const existingItem = state.items.find((item) => item.id === itemId);
+
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        state.items.push({ ...action.payload, id: itemId, quantity: 1 });
+      }
+      state.ShowToaster = true;
     },
-    removeItems: (state) => {
-      state.items.pop();
+    removeItem: (state, action) => {
+      const itemId = action.payload.card.info.id;
+      const existingItem = state.items.find((item) => item.id === itemId);
+
+      if (existingItem) {
+        existingItem.quantity -= 1;
+        if (existingItem.quantity <= 0) {
+          state.items = state.items.filter((item) => item.id !== itemId);
+        }
+      }
+      state.ShowToaster = state.items.length > 0;
     },
-    clearItems: (state) => {
-      state.items.length = 0;
+    clearCart: (state) => {
+      state.items = [];
+      state.ShowToaster = false;
+    },
+    setHasPlacedOrder: (state) => {
+      state.hasPlacedOrder = true;
     },
   },
 });
 
-export const {addItems, removeItems, clearItems} = cartSlice.actions
-export default cartSlice.reducer
+export const { addItem, removeItem, clearCart, setHasPlacedOrder } =
+  cartSlice.actions;
+export default cartSlice.reducer;
