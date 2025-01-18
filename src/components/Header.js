@@ -41,7 +41,7 @@ const Header = () => {
         <div className="img-container flex items-center">
           <Link to={"/"}>
             <h1 className="logo font-bold text-2xl md:text-3xl text-orange-600 mb-2 md:mb-0">
-              food<span className="text-black">express</span>
+              cho<span className="text-black">express</span>
             </h1>
           </Link>
         </div>
