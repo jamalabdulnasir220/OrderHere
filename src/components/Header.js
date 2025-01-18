@@ -58,7 +58,7 @@ const Header = () => {
               >
                 <div className="flex flex-col items-center md:flex-row">
                   <FontAwesomeIcon icon={faHouse} />
-                  <span className="pl-2 hover:text-orange-600">Hoe</span>
+                  <span className="pl-2 hover:text-orange-600">Home</span>
                 </div>
               </NavLink>
             </li>

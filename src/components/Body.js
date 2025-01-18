@@ -14,7 +14,6 @@ import {
   CAKE_LINK,
   COFFEE_LINK,
   DESSERTS_LINK,
-  EDUCORS_URL,
   ICECREAM_LINK,
   KHICHDI_LINK,
   NOODLES_LINK,
@@ -256,11 +255,7 @@ const Body = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetch(
-          `${EDUCORS_URL}?ApiKey=${
-            process.env.REACT_APP_API_KEY
-          }&Target=${encodeURIComponent(SWIGGY_API)}`
-        );
+        const data = await fetch(SWIGGY_API);
         const result = await data.json();
         const restaurants =
           result?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
