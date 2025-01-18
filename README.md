@@ -26,6 +26,3 @@ ChoExpress is a food delivery platform that utilizes Swiggy's Api for powerful d
 
 ---
 
-## Please Note
-
--- You need to install cors extension in your browser to be able to access the API data, or better still have a cors parsing extension.
