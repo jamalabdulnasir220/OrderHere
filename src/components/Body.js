@@ -255,7 +255,7 @@ const Body = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetch(SWIGGY_API);
+        const data = await fetch(`https://corsproxy.io/?${SWIGGY_API}`);
         const result = await data.json();
         const restaurants =
           result?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
