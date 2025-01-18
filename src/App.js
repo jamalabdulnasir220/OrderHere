@@ -11,6 +11,8 @@ import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import ResMenu from "./components/ResMenu";
 import Offers from "./components/Offers";
+import PrivateRoute from "./components/PrivateRoute";
+import ConfirmOrder from "./components/ConfirmOrder";
 
 const AppLayout = () => {
   return (
@@ -36,7 +38,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/offers",
-        element: <Offers />
+        element: <Offers />,
       },
       {
         path: "/about",
@@ -44,11 +46,19 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/restaurant/:ResId",
-        element: <ResMenu />
+        element: <ResMenu />,
       },
       {
         path: "/cart",
-        element: <Cart />
+        element: <Cart />,
+      },
+      {
+        path: "/orderplaced",
+        element: (
+          <PrivateRoute>
+            <ConfirmOrder />
+          </PrivateRoute>
+        ),
       },
     ],
     errorElement: <Error />,
